@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions
+    xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"
+    xmlns:tns="tns"
+    xmlns:plink="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+    xmlns:xop="http://www.w3.org/2004/08/xop/include"
+    xmlns:senc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:s1="CityWeatherRequest"
+    xmlns:s12env="http://www.w3.org/2003/05/soap-envelope/"
+    xmlns:s2="CityWeatherResponse"
+    xmlns:s12enc="http://www.w3.org/2003/05/soap-encoding/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:senv="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="tns" name="Application">
+    <wsdl:types>
+        <xs:schema targetNamespace="CityWeatherRequest" elementFormDefault="qualified">
+            <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+            <xs:complexType name="CityWeatherRequest">
+                <xs:sequence>
+                    <xs:element name="City" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="Country" type="xs:string" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="CityWeatherRequest" type="s1:CityWeatherRequest"/>
+        </xs:schema>
+        <xs:schema targetNamespace="tns" elementFormDefault="qualified">
+            <xs:import namespace="CityWeatherRequest"/>
+            <xs:import namespace="CityWeatherResponse"/>
+            <xs:complexType name="getCityWeather">
+                <xs:sequence>
+                    <xs:element name="request" type="s1:CityWeatherRequest" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="getCityWeatherResponse">
+                <xs:sequence>
+                    <xs:element name="getCityWeatherResult" type="s2:CityWeatherResponse" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="getCityWeather" type="tns:getCityWeather"/>
+            <xs:element name="getCityWeatherResponse" type="tns:getCityWeatherResponse"/>
+        </xs:schema>
+        <xs:schema targetNamespace="CityWeatherResponse" elementFormDefault="qualified">
+            <xs:import namespace="http://www.w3.org/2001/XMLSchema"/>
+            <xs:complexType name="CityWeatherResponse">
+                <xs:sequence>
+                    <xs:element name="City" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="Temperature" type="xs:float" minOccurs="0" nillable="true"/>
+                    <xs:element name="Country" type="xs:string" minOccurs="0" nillable="true"/>
+                    <xs:element name="UpdateTime" type="xs:dateTime" minOccurs="0" nillable="true"/>
+                    <xs:element name="Weather" type="xs:string" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="CityWeatherResponse" type="s2:CityWeatherResponse"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getCityWeather">
+        <wsdl:part name="getCityWeather" element="tns:getCityWeather"/>
+    </wsdl:message>
+    <wsdl:message name="getCityWeatherResponse">
+        <wsdl:part name="getCityWeatherResponse" element="tns:getCityWeatherResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="Application">
+        <wsdl:operation name="getCityWeather" parameterOrder="getCityWeather">
+            <wsdl:input name="getCityWeather" message="tns:getCityWeather"/>
+            <wsdl:output name="getCityWeatherResponse" message="tns:getCityWeatherResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="Application" type="tns:Application">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getCityWeather">
+            <soap:operation soapAction="getCityWeather" style="document"/>
+            <wsdl:input name="getCityWeather">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="getCityWeatherResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="Application">
+        <wsdl:port name="Application" binding="tns:Application">
+            <soap:address location="http://localhost:8080/weather?wsdl"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,19 @@
+
+Most likely you are not extremely thrilled of having to build a SOAP client, and even less if you are used to the simplicity and beauty of Python and REST, but it is not as bad if you use the right library.
+
+After investigating a few different libraries I decided for SUDS, seeming the most recent and simple to use and with good documentation and support on StackOverflow.
+
+The example service
+
+As the easiest way is to learn by example, I will explain how to implement a client to consume a invented SOAP service to get the current weather of a given city. As you may know, SOAP services are described by a WSDL file, containing an XML specification of the operations supported by the service. Our example service supports one operation, getCityWeather, that requires a country, and a city. It returns the  temperature, weather and update_time of the requested city. Here you can see the WSDL file (TODO: link)
+
+The client
+
+First of all we instantiate the SUDS client class, providing the location of the WSDL file. The file can be served at a URL or at a local directory, both options supported.
+
+The SUDS client exposes all the operations supported by the service as functions and provides a factory to instantiate all the data types defined in the WSDL file.
+
+Using the client instantiate a CityWeatherRequest, and set the data that will be sent in the request, in this case only City and Country that are just strings.
+
+Finaly issue the getCityWeather request and we get back result. The result is a Python class that contains all the fields defined in the reponse type for the operation in the WSDL file.
+
